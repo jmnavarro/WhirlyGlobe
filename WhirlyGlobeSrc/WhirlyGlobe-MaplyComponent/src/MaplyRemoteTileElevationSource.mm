@@ -133,6 +133,8 @@ using namespace WhirlyKit;
     if (_timeOut != 0.0)
         [urlReq setTimeoutInterval:_timeOut];
 
+	[urlReq setValue:@"application/vnd.quantized-mesh,application/octet-stream;q=0.9" forHTTPHeaderField:@"Accept"];
+
     return urlReq;
 }
 
@@ -254,10 +256,10 @@ using namespace WhirlyKit;
         }
         if (doLoad)
         {
-            NSData *tileData = [NSData dataWithContentsOfFile:fileName];
-            if (tileData)
+            NSData *elevData = [NSData dataWithContentsOfFile:fileName];
+            if (elevData)
             {
-				MaplyElevationChunk *elevChunk = [self decodeElevationData:tileData];
+				MaplyElevationChunk *elevChunk = [self elevChunkForData:elevData];
 
                 if ([_delegate respondsToSelector:@selector(remoteTileSource:modifyElevReturn:forTile:)])
                 {
@@ -271,24 +273,23 @@ using namespace WhirlyKit;
     }
     
     NSURLRequest *urlReq = [_tileInfo requestForTile:tileID];
-    if(urlReq)
+    if (urlReq)
     {
         NSURLResponse *response;
         NSError *error;
-        NSData *tileData = [NSURLConnection sendSynchronousRequest:urlReq
+        NSData *elevData = [NSURLConnection sendSynchronousRequest:urlReq
                                                  returningResponse:&response error:&error];
         
         // Look at the response
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-        if (httpResponse.statusCode != 200)
-            tileData = nil;
-        
-        // Let's also write it back out for the cache
-        if (_tileInfo.cacheDir && tileData)
-			//JM Do this asynchronously??
-            [tileData writeToFile:[_tileInfo fileNameForTile:tileID] atomically:YES];
+        if (httpResponse.statusCode != 200 || !elevData)
+            return nil;
 
-		MaplyElevationChunk *elevChunk = [self decodeElevationData:tileData];
+        // Let's also write it back out for the cache
+        if (_tileInfo.cacheDir)
+            [elevData writeToFile:[_tileInfo fileNameForTile:tileID] atomically:YES];
+
+		MaplyElevationChunk *elevChunk = [self elevChunkForData:elevData];
 
 		//JM what about to serialize & cache MaplyElevationChunk decoded data instead of raw server data?
 		// We would save the decoding time when we hit the cache
@@ -301,12 +302,6 @@ using namespace WhirlyKit;
     }
     
     return nil;
-}
-
-- (MaplyElevationChunk *)decodeElevationData:(NSData *)data {
-	// all the decoding stuff from
-	// http://cesiumjs.org/data-and-assets/terrain/formats/quantized-mesh-1.0.html
-	return nil;
 }
 
 - (void)startFetchLayer:(MaplyQuadImageTilesLayer *)layer tile:(MaplyTileID)tileID
@@ -331,7 +326,9 @@ using namespace WhirlyKit;
         // Let the paging layer know about it
         [layer loadedElevation:elevChunk forTile:tileID];
         
-    } else {
+    }
+	else
+	{
         NSURLRequest *urlReq = [_tileInfo requestForTile:tileID];
         if(!urlReq)
         {
@@ -349,9 +346,6 @@ using namespace WhirlyKit;
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         op.completionQueue = queue;
 
-		//JM TODO add custom header
-		//Accept: application/vnd.quantized-mesh,application/octet-stream;q=0.9
-
         [op setCompletionBlockWithSuccess:
          ^(AFHTTPRequestOperation *operation, id responseObject)
             {
@@ -368,7 +362,7 @@ using namespace WhirlyKit;
 						//JM why not asynchronously?
                         [elevData writeToFile:fileName atomically:YES];
 
-					MaplyElevationChunk *elevChunk = [self decodeElevationData:elevData];
+					MaplyElevationChunk *elevChunk = [self elevChunkForData:elevData];
 
                     if ([_delegate respondsToSelector:@selector(remoteTileElevationSource:modifyTileReturn:forTile:)])
                         elevChunk = [_delegate remoteTileElevationSource:self modifyElevReturn:elevChunk forTile:tileID];
@@ -399,6 +393,22 @@ using namespace WhirlyKit;
         }
         [op start];
     }
+}
+
+- (MaplyElevationChunk *)elevChunkForData:(NSData* )data
+{
+	NSAssert(NO, @"elevChunkFromData is intended to be overriden");
+	return nil;
+}
+
+@end
+
+
+@implementation MaplyCesiumTileElevationSource
+
+- (MaplyElevationChunk *)elevChunkForData:(NSData* )data
+{
+	return [[MaplyElevationCesiumChunk alloc] initWithData:data];
 }
 
 @end

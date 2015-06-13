@@ -96,16 +96,11 @@
 - (MaplyCoordinateSystem *)getCoordSystem;
 - (int)minZoom;
 - (int)maxZoom;
-//JM where are we going to represent elevation? is MaplyElevationChunk enough?
 - (MaplyElevationChunk *)elevForTile:(MaplyTileID)tileID;
 
 - (bool)tileIsLocal:(MaplyTileID)tileID frame:(int)frame;
 
-//JM do we need something like this?
 - (void)startFetchLayer:(id)layer tile:(MaplyTileID)tileID;
-
-
-
 
 @property (nonatomic,readonly) MaplyRemoteTileElevationInfo *tileInfo;
 
@@ -118,5 +113,10 @@
 //JM needed?
 //+ (void)setTrackConnections:(bool)track;
 //+ (int)numOutstandingConnections;
+
+@end
+
+
+@interface MaplyCesiumTileElevationSource : MaplyRemoteTileElevationSource
 
 @end

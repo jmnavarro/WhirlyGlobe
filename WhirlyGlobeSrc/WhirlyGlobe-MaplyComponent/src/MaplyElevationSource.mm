@@ -21,23 +21,6 @@
 #import "MaplyElevationSource.h"
 #import "MaplyElevationSource_private.h"
 
-@implementation MaplyElevationChunk
-
-- (id)initWithData:(NSData *)data numX:(unsigned int)numX numY:(unsigned int)numY
-{
-    self = [super init];
-    if (!self)
-        return nil;
-    
-    _numX = numX;
-    _numY = numY;
-    _data = data;
-    
-    return self;
-}
-
-
-@end
 
 @implementation MaplyElevationSourceTester
 {
@@ -111,7 +94,7 @@ static const float ScaleFactor = 300;
         }
     
     NSData *data = [[NSData alloc] initWithBytesNoCopy:floatData length:sizeof(float)*(numX+1)*(numY+1) freeWhenDone:YES];
-    MaplyElevationChunk *elevChunk = [[MaplyElevationChunk alloc] initWithData:data numX:(numX+1) numY:(numY+1)];
+    MaplyElevationChunk *elevChunk = [[MaplyElevationGridChunk alloc] initWithData:data numX:(numX+1) numY:(numY+1)];
     
     return elevChunk;
 }
@@ -138,12 +121,7 @@ static const float ScaleFactor = 300;
     MaplyTileID tileID;
     tileID.x = col;    tileID.y = row;    tileID.level = level;
     MaplyElevationChunk *maplyChunk = [elevSource elevForTile:tileID];
-    if (maplyChunk)
-    {
-        WhirlyKitElevationChunk *wkChunk = [[WhirlyKitElevationChunk alloc] initWithFloatData:maplyChunk.data sizeX:maplyChunk.numX sizeY:maplyChunk.numY];
-        return wkChunk;
-    }
-    return nil;
+    return [maplyChunk whirlyKitType];
 }
 
 @end

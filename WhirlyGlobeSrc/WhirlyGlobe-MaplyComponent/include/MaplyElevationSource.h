@@ -21,38 +21,7 @@
 #import "MaplyComponentObject.h"
 #import "MaplyCoordinateSystem.h"
 #import "MaplyTileSource.h"
-
-/** @brief The Maply Elevation Chunk holds elevations for a single tile.
-    @details This object holds elevaiton data for a single tile.
-    Each tile overlaps the the eastern and northern neighbors by one
-    cell.  Why?  Because we're generating triangles with these and
-    they're independent.  Draw a picture, it'll make sense.
-    @details Data values are currently onl 32 bit floating point.
-    There may be a type parameter in the future.
-  */
-@interface MaplyElevationChunk : NSObject
-
-/** @brief Initialize with the data and size.
-    @details This initializer takes an NSData object with the given number of
-    samples.  Don't forget to add an extra one along the eastern and
-    northern edges to match up with those tiles.  You still need to
-    pass in as many samples as you're saying you are.  So if you say
-    11 x 11, then there need to be 121 floats in the NSData object.
-    @param data The NSData full of float (32 bit) samples.
-    @param numX Number of samples in X.
-    @param numY Number of samples in Y.
-  */
-- (id)initWithData:(NSData *)data numX:(unsigned int)numX numY:(unsigned int)numY;
-
-/// @brief Number of samples in X
-@property unsigned int numX;
-/// @brief Number of samples in Y
-@property unsigned int numY;
-
-/// This is the data.  Elevations are floats (32 bit) in meters.
-@property (nonatomic,strong) NSData *data;
-
-@end
+#import "MaplyElevationChunk.h"
 
 /** @brief Elevation Source Delegate provides elevation data
      for a given tile.
