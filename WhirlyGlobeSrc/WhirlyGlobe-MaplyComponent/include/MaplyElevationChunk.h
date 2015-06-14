@@ -69,14 +69,3 @@
 @property (nonatomic,readonly,strong) NSData *data;
 
 @end
-
-
-
-/** @brief The Maply Elevation Cesium Chunk holds elevation data retrieved from a Cesium server for a single tile.
-    @see http://cesiumjs.org/data-and-assets/terrain/formats/quantized-mesh-1.0.html
-  */
-@interface MaplyElevationCesiumChunk : MaplyElevationChunk
-
-- (id)initWithData:(NSData *)data;
-
-@end

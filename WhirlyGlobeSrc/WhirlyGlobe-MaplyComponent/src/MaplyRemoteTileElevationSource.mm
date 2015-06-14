@@ -134,7 +134,11 @@ using namespace WhirlyKit;
     if (_timeOut != 0.0)
         [urlReq setTimeoutInterval:_timeOut];
 
-	[urlReq setValue:@"application/vnd.quantized-mesh,application/octet-stream;q=0.9" forHTTPHeaderField:@"Accept"];
+    [urlReq setValue:@"application/vnd.quantized-mesh,application/octet-stream;q=0.9" forHTTPHeaderField:@"Accept"];
+
+    // Use this header to specify extensions
+    // See http://cesiumjs.org/data-and-assets/terrain/formats/quantized-mesh-1.0.html
+    //Accept : 'application/vnd.quantized-mesh;extensions=octvertexnormals-watermask'
 
     return urlReq;
 }
@@ -405,7 +409,7 @@ using namespace WhirlyKit;
 @end
 
 
-@implementation MaplyCesiumTileElevationSource
+@implementation MaplyTileElevationCesiumSource
 
 - (MaplyElevationChunk *)elevChunkForData:(NSData* )data
 {

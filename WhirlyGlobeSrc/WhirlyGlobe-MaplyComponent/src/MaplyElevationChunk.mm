@@ -104,28 +104,3 @@ using namespace WhirlyKit;
 }
 
 @end
-
-
-
-@implementation MaplyElevationCesiumChunk
-
-- (id)initWithData:(NSData *)data
-{
-    self = [super init];
-    if (!self)
-        return nil;
-}
-
-- (BasicDrawable *)elevDrawable
-{
-	//TODO
-	return nil;
-}
-
-- (WhirlyKitElevationChunk *)whirlyKitType
-{
-	//TODO
-	return nil;
-}
-
-@end
