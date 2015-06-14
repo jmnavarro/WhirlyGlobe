@@ -26,6 +26,7 @@
 #import "MaplyBaseViewController_private.h"
 #import "WhirlyGlobe.h"
 #import "MaplyImageTile_private.h"
+#import "MaplyElevationChunk.h"
 
 using namespace WhirlyKit;
 

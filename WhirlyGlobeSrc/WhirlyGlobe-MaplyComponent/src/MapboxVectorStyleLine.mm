@@ -137,7 +137,7 @@
         for (NSNumber *num in _paint.lineDashArray.dashes)
             totLen += [num doubleValue] * maxWidth;
         
-        int totLenRounded = WhirlyKit::NextPowOf2(totLen);
+        int totLenRounded = NextPowOf2(totLen);
         for (NSNumber *num in _paint.lineDashArray.dashes)
         {
             double len = [num doubleValue] * maxWidth * totLenRounded / totLen;
@@ -191,6 +191,19 @@
     }
     
     return self;
+}
+
+// Courtesy: http://acius2.blogspot.com/2007/11/calculating-next-power-of-2.html
+unsigned int NextPowOf2(unsigned int val)
+{
+	val--;
+	val = (val >> 1) | val;
+	val = (val >> 2) | val;
+	val = (val >> 4) | val;
+	val = (val >> 8) | val;
+	val = (val >> 16) | val;
+	
+	return (val + 1);
 }
 
 

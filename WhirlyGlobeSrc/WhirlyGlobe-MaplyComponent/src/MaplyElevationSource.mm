@@ -20,6 +20,7 @@
 
 #import "MaplyElevationSource.h"
 #import "MaplyElevationSource_private.h"
+#import "MaplyElevationChunk.h"
 
 
 @implementation MaplyElevationSourceTester

@@ -21,10 +21,8 @@
 #import "MaplyCoordinateSystem.h"
 #import "MaplyTileSource.h"
 #import "Drawable.h"
-#import "ElevationChunk.h"
 
-
-using namespace WhirlyKit;
+@class WhirlyKitElevationChunk;
 
 
 /** @brief The Maply Elevation Chunk is the abstract type to hold
@@ -34,7 +32,7 @@ using namespace WhirlyKit;
   */
 @interface MaplyElevationChunk : NSObject
 
-- (BasicDrawable *)elevDrawable;
+- (WhirlyKit::BasicDrawable *)elevDrawable;
 - (WhirlyKitElevationChunk *)whirlyKitType;
 
 @end

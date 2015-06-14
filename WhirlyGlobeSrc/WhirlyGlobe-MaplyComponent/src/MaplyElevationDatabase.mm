@@ -23,6 +23,7 @@
 #import "NSData+Zlib.h"
 #import "FMDatabase.h"
 #import "FMDatabaseQueue.h"
+#import "MaplyElevationChunk.h"
 
 @implementation MaplyElevationDatabase
 {

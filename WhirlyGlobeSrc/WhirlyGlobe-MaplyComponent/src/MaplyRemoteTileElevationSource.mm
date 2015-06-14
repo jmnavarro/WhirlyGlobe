@@ -24,6 +24,7 @@
 #import "MaplyCoordinateSystem_private.h"
 #import "MaplyQuadImageTilesLayer.h"
 #import "MaplyRemoteTileSource_private.h"
+#import "MaplyElevationCesiumChunk.h"
 
 using namespace Eigen;
 using namespace WhirlyKit;

@@ -21,7 +21,8 @@
 #import "MaplyComponentObject.h"
 #import "MaplyCoordinateSystem.h"
 #import "MaplyTileSource.h"
-#import "MaplyElevationChunk.h"
+
+@class MaplyElevationChunk;
 
 /** @brief Elevation Source Delegate provides elevation data
      for a given tile.

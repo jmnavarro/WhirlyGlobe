@@ -20,7 +20,7 @@
 
 #import "MaplyElevationChunk.h"
 #import "WhirlyVector.h"
-#import "Drawable.h"
+#import "ElevationChunk.h"
 
 
 
