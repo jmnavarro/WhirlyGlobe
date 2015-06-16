@@ -22,7 +22,23 @@
 #import "WhirlyVector.h"
 #import "GlobeMath.h"
 
-@interface WhirlyKitElevationChunk : NSObject
+
+@protocol WhirlyKitElevationChunkProtocol
+
+/// Return the elevation at an exact location
+- (float)elevationAtX:(int)x y:(int)y;
+
+/// Interpolate an elevation at the given location
+- (float)interpolateElevationAtX:(float)x y:(float)y;
+
+@end
+
+
+// Fake type
+typedef NSObject<WhirlyKitElevationChunkProtocol> WhirlyKitElevationChunk;
+
+
+@interface WhirlyKitElevationGridChunk : NSObject<WhirlyKitElevationChunkProtocol>
 
 /// Number of elements in X and Y
 @property (nonatomic,readonly) int numX,numY;
@@ -31,7 +47,7 @@
 @property (nonatomic,assign) float noDataValue;
 
 /// Fills in a chunk with random data values.  For testing.
-+ (WhirlyKitElevationChunk *)ElevationChunkWithRandomData;
++ (WhirlyKitElevationGridChunk *)ElevationChunkWithRandomData;
 
 /// Initialize with an NSData full of floats (elevation in meters)
 /// SizeX and SizeY are the number of samples in each direction

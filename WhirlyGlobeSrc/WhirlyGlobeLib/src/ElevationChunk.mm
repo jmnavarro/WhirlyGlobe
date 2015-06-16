@@ -23,15 +23,17 @@
 using namespace Eigen;
 using namespace WhirlyKit;
 
+
 typedef enum {WhirlyKitElevationFloats,WhirlyKitElevationShorts} WhirlyKitElevationFormat;
 
-@implementation WhirlyKitElevationChunk
+
+@implementation WhirlyKitElevationGridChunk
 {
     WhirlyKitElevationFormat dataType;
     NSData *data;
 }
 
-+ (WhirlyKitElevationChunk *)ElevationChunkWithRandomData
++ (WhirlyKitElevationGridChunk *)ElevationChunkWithRandomData
 {
     int numX = 20;
     int numY = 20;
@@ -39,9 +41,8 @@ typedef enum {WhirlyKitElevationFloats,WhirlyKitElevationShorts} WhirlyKitElevat
     for (unsigned int ii=0;ii<numX*numY;ii++)
         floatArray[ii] = drand48()*30000;
     NSMutableData *data = [[NSMutableData alloc] initWithBytes:floatArray length:sizeof(float)*numX*numY];
-    WhirlyKitElevationChunk *chunk = [[WhirlyKitElevationChunk alloc] initWithFloatData:data sizeX:numX sizeY:numY];
-    
-    return chunk;
+
+    return [[WhirlyKitElevationGridChunk alloc] initWithFloatData:data sizeX:numX sizeY:numY];
 }
 
 - (id)initWithFloatData:(NSData *)inData sizeX:(int)sizeX sizeY:(int)sizeY
@@ -74,8 +75,6 @@ typedef enum {WhirlyKitElevationFloats,WhirlyKitElevationShorts} WhirlyKitElevat
     return self;    
 }
 
-
-/// Return a single elevation at the given location
 - (float)elevationAtX:(int)x y:(int)y
 {
     if (!data)
