@@ -1,40 +1,9 @@
-/*
- *  MaplyStarModel.java
- *  WhirlyGlobeLib
- *
- *  Created by jmnavarro
- *  Copyright 2011-2015 mousebird consulting
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- */
-package com.mousebirdconsulting.autotester.TestCases;
+package com.mousebird.maply;
 
 import android.app.Activity;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
-
-import com.mousebird.maply.ComponentObject;
-import com.mousebird.maply.GlobeController;
-import com.mousebird.maply.MaplyBaseController;
-import com.mousebird.maply.MaplyTexture;
-import com.mousebird.maply.ParticleBatch;
-import com.mousebird.maply.ParticleSystem;
-import com.mousebird.maply.ParticleSystemAttribute;
-import com.mousebird.maply.Point3d;
-import com.mousebird.maply.Shader;
-
 import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedInputStream;
@@ -43,17 +12,13 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.TimeZone;
-import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jodd.datetime.JDateTime;
-
-
+/**
+ * Created by danielmartingarcia on 29/2/16.
+ */
 public class MaplyStarModel {
 
     private class SingleStar
@@ -64,40 +29,40 @@ public class MaplyStarModel {
 
     private static final String vertexShaderTriPoint =
             "uniform mat4  u_mvpMatrix;"+
-            "uniform float u_radius;"+
-            ""+
-            "attribute vec3 a_position;"+
-            "attribute float a_size;"+
-            ""+
-            "varying vec4 v_color;"+
-            ""+
-            "void main()"+
-            "{"+
-            "   v_color = vec4(1.0,1.0,1.0,1.0);"+
-            "   gl_PointSize = a_size;"+
-            "   gl_Position = u_mvpMatrix * vec4(a_position * u_radius,1.0);"+
-            "}";
+                    "uniform float u_radius;"+
+                    ""+
+                    "attribute vec3 a_position;"+
+                    "attribute float a_size;"+
+                    ""+
+                    "varying vec4 v_color;"+
+                    ""+
+                    "void main()"+
+                    "{"+
+                    "   v_color = vec4(1.0,1.0,1.0,1.0);"+
+                    "   gl_PointSize = a_size;"+
+                    "   gl_Position = u_mvpMatrix * vec4(a_position * u_radius,1.0);"+
+                    "}";
 
     private static final String fragmentShaderTriPoint =
             "precision lowp float;"+
-            ""+
-            "varying vec4      v_color;"+
-            ""+
-            "void main()"+
-            "{"+
-            "  gl_FragColor = v_color;"+
-            "}";
+                    ""+
+                    "varying vec4      v_color;"+
+                    ""+
+                    "void main()"+
+                    "{"+
+                    "  gl_FragColor = v_color;"+
+                    "}";
 
     private static final String fragmentShaderTexTriPoint =
             "precision lowp float;"+
-            ""+
-            "uniform sampler2D s_baseMap0;"+
-            "varying vec4      v_color;"+
-            ""+
-            "void main()"+
-            "{"+
-            "  gl_FragColor = v_color * texture2D(s_baseMap0, gl_PointCoord);"+
-            "}";
+                    ""+
+                    "uniform sampler2D s_baseMap0;"+
+                    "varying vec4      v_color;"+
+                    ""+
+                    "void main()"+
+                    "{"+
+                    "  gl_FragColor = v_color * texture2D(s_baseMap0, gl_PointCoord);"+
+                    "}";
 
     ArrayList<SingleStar> stars;
     ParticleSystem particleSystem;
@@ -161,8 +126,7 @@ public class MaplyStarModel {
 
         //Julian date for position calculation
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-        JDateTime jdt = new JDateTime(cal.getTimeInMillis());
-        double jd = jdt.getJulianDateDouble();
+        double jd = getJulianDateDouble(cal.getTimeInMillis());
         double siderealTime = Greenwich_Mean_Sidereal_Deg(jd);
 
         //Really simple shader
@@ -244,4 +208,42 @@ public class MaplyStarModel {
 
         return gmst;
     } //Greenwich_Mean_Sidereal_Deg
+
+
+    public static final int SECONDS_IN_DAY = 60 * 60 * 24;
+
+    public static final long MILLIS_IN_DAY = 1000L * SECONDS_IN_DAY;
+
+
+    private double getJulianDateDouble(long millis){
+
+        TimeZone timeZone = TimeZone.getDefault();
+
+        millis += timeZone.getOffset(millis);
+        int integer = (int) (millis / MILLIS_IN_DAY);
+        double fraction = (double) (millis % MILLIS_IN_DAY) / MILLIS_IN_DAY;
+        integer += getInteger(2440587, 0.5);
+        fraction += getFraction(2451910, 0.5);
+        return (double) integer + fraction;
+    }
+
+    private int getInteger(int i, double f){
+        int integer = i;
+        int fi = (int) f;
+        f -= fi;
+        integer += fi;
+        if (f < 0) {
+            integer--;
+        }
+        return integer;
+    }
+
+    private double getFraction(int i, double f){
+        int fi = (int) f;
+        f -= fi;
+        if (f < 0) {
+            f +=1;
+        }
+        return f;
+    }
 }

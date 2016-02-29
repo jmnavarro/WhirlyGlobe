@@ -24,6 +24,7 @@ import android.app.Activity;
 import com.mousebird.maply.GlobeController;
 import com.mousebird.maply.LayerThread;
 import com.mousebird.maply.MaplyBaseController;
+import com.mousebird.maply.MaplyStarModel;
 import com.mousebirdconsulting.autotester.Framework.MaplyTestCase;
 
 import java.io.IOException;
