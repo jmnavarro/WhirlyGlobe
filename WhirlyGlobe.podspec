@@ -25,93 +25,13 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '7.0'
   s.requires_arc = true
 
-  s.source = { :git => 'https://github.com/mousebird/WhirlyGlobe.git', :branch => 'develop_2_4_1' }
-
-  s.compiler_flags = '-D__USE_SDL_GLES__', '-D__IPHONEOS__ -DSQLITE_OPEN_READONLY'
-  s.xcconfig = { "HEADER_SEARCH_PATHS" => "\"${PODS_ROOT}/eigen\" \"${PODS_ROOT}/clipper\" \"$(SDKROOT)/usr/include/libxml2\"" }
-
-  s.default_subspec = 'MaplyComponent'
-
-  s.subspec 'glues-wg' do |gl|
-    gl.source_files = 'WhirlyGlobeSrc/local_libs/glues/**/*.{c,h}'
-    gl.preserve_paths = 'WhirlyGlobeSrc/local_libs/glues/**/*.i'
-    gl.private_header_files = 'WhirlyGlobeSrc/local_libs/glues/**/*.h'
-    gl.exclude_files = 'WhirlyGlobeSrc/local_libs/glues/source/libnurbs/nurbtess/{glimports,mystdio,mystdlib}.h', 'WhirlyGlobeSrc/local_libs/glues/source/glu.h'
-  end
-
-  s.subspec 'shapefile' do |shp|
-    shp.source_files = 'WhirlyGlobeSrc/local_libs/shapefile/**/*.{c,h}'
-    shp.private_header_files = 'WhirlyGlobeSrc/local_libs/shapefile/**/*.h'
-  end
-
-  s.subspec 'kissxml' do |kss|
-    kss.source_files = 'WhirlyGlobeSrc/local_libs/KissXML/**/*.{h,m}'
-    kss.private_header_files = 'WhirlyGlobeSrc/local_libs/KissXML/**/*.h'
-  end
-
-  s.subspec 'aaplus' do |aa|
-    aa.source_files = 'WhirlyGlobeSrc/local_libs/aaplus/**/*.{h,cpp}'
-    aa.private_header_files = 'WhirlyGlobeSrc/local_libs/aaplus/**/*.h'
-  end
-
-  s.subspec 'octencoding' do |oe|
-    oe.source_files = 'WhirlyGlobeSrc/local_libs/octencoding/**/*.h'
-    oe.private_header_files = 'WhirlyGlobeSrc/local_libs/octencoding/**/*.h'
-  end
-
-  s.subspec 'Lib-Headers' do |lh|
-    lh.source_files = 'WhirlyGlobeSrc/WhirlyGlobeLib/include/*.h'
-    lh.private_header_files = 'WhirlyGlobeSrc/WhirlyGlobeLib/include/*.h'
-    lh.dependency 'eigen', '~> 3.2.4'
-  end
-
-  s.subspec 'Lib' do |l|
-    l.source_files = 'WhirlyGlobeSrc/WhirlyGlobeLib/src/*.{mm,m}'
-    l.dependency 'WhirlyGlobe/Lib-Headers'
-    l.dependency 'WhirlyGlobe/glues-wg'
-    l.dependency 'WhirlyGlobe/octencoding'
-    l.dependency 'proj4', '~> 4.8.0'
-#   Pulled internally
-    l.dependency 'WhirlyGlobe/shapefile'
-    l.dependency 'clipper', '~> 6.1.3a'
-    l.dependency 'libjson', '~> 7.6.0'
-    l.dependency 'tinyxml', '~> 2.1.0'
-    l.libraries = 'c++', 'sqlite3'
-    l.frameworks = 'UIKit', 'OpenGLES'
-  end
-
-  s.subspec 'MaplyComponent-Headers' do |mch|
-    mch.source_files = 'WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/include/**/*.h'
-    mch.public_header_files = 'WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/include/*.h' # , "WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/include/private/*.h"
-    mch.private_header_files = 'WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/include/{MaplyBridge,vector_tile.pb}.h', 'WhirlyGlobeSrc/local_libs/**'
-    mch.dependency 'WhirlyGlobe/Lib-Headers'
-  end
-
-  s.subspec 'Headers' do |h|
-    h.dependency 'WhirlyGlobe/MaplyComponent-Headers'
-  end
-
-  s.subspec 'MaplyComponent' do |mc|
-    mc.source_files = 'WhirlyGlobeSrc/WhirlyGlobe-MaplyComponent/src/*.{mm,m,cpp}'
-    mc.dependency 'WhirlyGlobe/kissxml'
-    mc.dependency 'WhirlyGlobe/aaplus'
-    mc.dependency 'WhirlyGlobe/Lib'
-    mc.dependency 'WhirlyGlobe/MaplyComponent-Headers'
-    mc.dependency 'SMCalloutView'
-    mc.dependency 'FMDB'
-    mc.libraries = 'z', 'xml2'
-    mc.frameworks = 'CoreLocation', 'MobileCoreServices', 'SystemConfiguration', 'CFNetwork'
-  end
-  
-  s.subspec 'Nightly' do |n|
-    n.source = { :http => "https://s3-us-west-1.amazonaws.com/whirlyglobemaplydistribution/iOS_daily_builds/WhirlyGlobe-Maply_Nightly_latestzzzzzzz.zip" }
-    n.frameworks = 'CoreLocation'
-    n.vendored_frameworks = 'WhirlyGlobeMaplyComponent.framework'
-    n.xcconfig = {
+  s.source = { :http => "https://s3-us-west-1.amazonaws.com/whirlyglobemaplydistribution/iOS_daily_builds/WhirlyGlobe-Maply_Nightly_latest.zip" }
+  s.frameworks = 'CoreLocation'
+  s.vendored_frameworks = 'WhirlyGlobeMaplyComponent.framework'
+  s.xcconfig = {
       #'USER_HEADER_SEARCH_PATHS' => '$(inherited) ${PODS_ROOT}/WhirlyGlobe/WhirlyGlobeMaplyComponent.framework/Headers/',
       #'LIBRARY_SEARCH_PATHS' => '$(SRCROOT)/Pods/**'
-    }
-    n.library = 'z', 'c++', 'xml2', 'sqlite3'
-  end
+  }
+  s.library = 'z', 'c++', 'xml2', 'sqlite3'
 
 end
