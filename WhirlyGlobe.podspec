@@ -102,5 +102,16 @@ Pod::Spec.new do |s|
     mc.libraries = 'z', 'xml2'
     mc.frameworks = 'CoreLocation', 'MobileCoreServices', 'SystemConfiguration', 'CFNetwork'
   end
+  
+  s.subspec 'Nightly' do |n|
+    n.source = { :http => "https://s3-us-west-1.amazonaws.com/whirlyglobemaplydistribution/iOS_daily_builds/WhirlyGlobe-Maply_Nightly_latest.zip" }
+    n.frameworks = 'CoreLocation'
+    n.vendored_frameworks = 'WhirlyGlobeMaplyComponent.framework'
+    n.xcconfig = {
+      #'USER_HEADER_SEARCH_PATHS' => '$(inherited) ${PODS_ROOT}/WhirlyGlobe/WhirlyGlobeMaplyComponent.framework/Headers/',
+      #'LIBRARY_SEARCH_PATHS' => '$(SRCROOT)/Pods/**'
+    }
+    n.library = 'z', 'c++', 'xml2', 'sqlite3'
+  end
 
 end
