@@ -104,7 +104,7 @@ Pod::Spec.new do |s|
   end
   
   s.subspec 'Nightly' do |n|
-    n.source = { :http => "https://s3-us-west-1.amazonaws.com/whirlyglobemaplydistribution/iOS_daily_builds/WhirlyGlobe-Maply_Nightly_latest.zip" }
+    n.source = { :http => "https://s3-us-west-1.amazonaws.com/whirlyglobemaplydistribution/iOS_daily_builds/WhirlyGlobe-Maply_Nightly_latestzzzzzzz.zip" }
     n.frameworks = 'CoreLocation'
     n.vendored_frameworks = 'WhirlyGlobeMaplyComponent.framework'
     n.xcconfig = {
