@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '7.0'
   s.requires_arc = true
 
-  s.source = { :http => "https://s3-us-west-1.amazonaws.com/whirlyglobemaplydistribution/iOS_daily_builds/WhirlyGlobe-Maply_Nightly_latest.zip" }
+  s.source = { :http => "https://s3-us-west-1.amazonaws.com/whirlyglobemaplydistribution/iOS_daily_builds/WhirlyGlobe-Maply_Nightly_latestzzzzzz.zip" }
   s.frameworks = 'CoreLocation'
   s.vendored_frameworks = 'WhirlyGlobeMaplyComponent.framework'
   s.xcconfig = {
