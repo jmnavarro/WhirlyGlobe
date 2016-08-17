@@ -43,6 +43,8 @@
   */
 @interface MaplySelectedObject : NSObject
 
+@property double kkDeVaca;
+
 /// @brief Object the user selected
 /// @details This is the original object the user passed in when adding it to the globe or map.
 @property (nonatomic,weak) id __nullable selectedObj;
